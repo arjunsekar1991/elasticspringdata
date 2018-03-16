@@ -1,0 +1,11 @@
+package com.example.demo;
+
+import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+
+@Service
+public interface ElasticProcessHistoryService {
+	Optional<HistoryDoc> findById(String id);
+	HistoryDoc save(HistoryDoc historyDoc);
+}
