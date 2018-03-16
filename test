@@ -1,0 +1,41 @@
+package com.example.test;
+
+import static org.junit.Assert.assertNotNull;
+
+import java.util.Optional;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
+import com.example.demo.ElasticProcessHistoryServiceImpl;
+import com.example.demo.FlowApplication;
+import com.example.demo.HistoryDoc;
+
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = FlowApplication.class)
+
+public class FlowApplicationTests {
+	@Autowired(required = true)
+	private ElasticProcessHistoryServiceImpl elasticProcessHistoryServiceImpl;
+	
+	@Test
+	public void testMethod() {
+
+		Optional<HistoryDoc> historyDoc = elasticProcessHistoryServiceImpl.findById("0");
+		//System.out.println(historyDoc.get().getProcessId() + "------" + historyDoc.get().getStatus());
+		assertNotNull(historyDoc.get().getProcessId());
+		assertNotNull(historyDoc.get().getStatus());
+	}
+
+	@Test
+	public void testMethod2() {
+
+		HistoryDoc historyDoc = new HistoryDoc();
+		historyDoc.setProcessId("2");
+		historyDoc.setStatus("Waiting");
+		HistoryDoc historyDocSaved = elasticProcessHistoryServiceImpl.save(historyDoc);
+		System.out.println(historyDocSaved.getProcessId()+"--------"+historyDocSaved.getStatus());
+	}
+}
