@@ -1,0 +1,33 @@
+package com.example.demo;
+
+import org.springframework.data.annotation.Id;
+import org.springframework.data.elasticsearch.annotations.Document;
+
+@Document(indexName = "activiti", type = "historydoc")
+public class HistoryDoc {
+	@Id
+	private String processId;
+	private String status;
+	public String getProcessId() {
+		return processId;
+	}
+	public void setProcessId(String processId) {
+		this.processId = processId;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	
+	public HistoryDoc() {
+		
+	}
+	public HistoryDoc(String processId, String status) {
+		// TODO Auto-generated constructor stub
+	this.processId=processId;
+	this.status=status;
+			
+	}
+}
