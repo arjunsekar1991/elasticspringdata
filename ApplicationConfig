@@ -1,0 +1,60 @@
+package com.example.demo;
+
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import org.elasticsearch.client.Client;
+import org.elasticsearch.common.settings.Settings;
+import org.elasticsearch.common.transport.InetSocketTransportAddress;
+import org.elasticsearch.transport.client.PreBuiltTransportClient;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
+import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
+import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
+
+@Configuration
+@EnableElasticsearchRepositories(basePackages = "com.example.demo")
+public class ApplicationConfig {
+
+	@Value("${elasticsearch.host}")
+	private String esHost;
+
+	@Value("${elasticsearch.port}")
+	private int esPort;
+
+	@Value("${elasticsearch.clustername}")
+	private String esClusterName;
+
+	@SuppressWarnings("null")
+	@Bean
+	public Client client() throws Exception {
+
+		Settings settings = Settings.builder().put("cluster.name", esClusterName).build();
+		Client  client = null;
+		try {
+			client = new PreBuiltTransportClient(settings).addTransportAddress(
+					new InetSocketTransportAddress(InetAddress.getByName("localhost"), Integer.valueOf(9300)));
+		} catch (UnknownHostException ex) {
+			System.out.println("Exception occurred while getting Client : ");
+			client.close();
+		}
+
+		return client;
+	}
+
+	@Bean
+	public ElasticsearchOperations elasticsearchTemplate() throws Exception {
+		return new ElasticsearchTemplate(client());
+	}
+
+	// Embedded Elasticsearch Server
+	/*
+	 * @Bean public ElasticsearchOperations elasticsearchTemplate() { return new
+	 * ElasticsearchTemplate(nodeBuilder().local(true).node().client()); }
+	 */
+	@Bean
+	public ElasticProcessHistoryServiceImpl elasticProcessHistoryServiceImpl() {
+			return new ElasticProcessHistoryServiceImpl();
+		}
+}
