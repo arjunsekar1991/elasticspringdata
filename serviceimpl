@@ -1,0 +1,21 @@
+package com.example.demo;
+
+import java.util.Optional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+@Component
+public class ElasticProcessHistoryServiceImpl implements ElasticProcessHistoryService {
+	@Autowired
+	ElasticProcessHistoryRepository elasticProcessHistoryRepository;
+
+	public Optional<HistoryDoc> findById(String id) {
+		return elasticProcessHistoryRepository.findById(id);
+	}
+
+	@Override
+	public HistoryDoc save(HistoryDoc historyDoc) {
+		return elasticProcessHistoryRepository.save(historyDoc);
+	}
+
+}
